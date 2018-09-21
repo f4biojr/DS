@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Teste de números</title>
+	<style>
+		body, table, footer, .valor { margin: 0 auto; }
+		h1 {text-align: center;}
+		h2 { text-align: center; }
+		h3, footer, label { margin-left: 8%; }
+		table { border-collapse: collapse; }
+		th, td { border:1px solid lightgray; padding: 2px 5px; text-align: center; }
+		.input, .format, .output { text-align: right; }
+		.format, .output { white-space: pre; }
+		.group { background-color: wheat }
+		input#entrada {width: 50%; height: 40px; font-size: 30px; text-align: center;}
+		body pre.prettyprint { border: 0; }
+	</style>
+</head>
+<body onload="verificar()">
+    <h1>
+	<div class="valor">
+        <p>Copie aqui o codigo a ser avaliado</p>
+    	<input type="text" name="valor" id="entrada" onkeyup="verificar()" size="120">
+    	<br>
+    	<input type="button" value="verificar" onclick="verificar()">
+	</div>
+	</h1>
+    <br>
+    <table id="list" width="80%">
+        <tr><th colspan="4">Informações</th></tr>
+        <tr>
+            <td colspan="2">Comprimento</td>
+            <td colspan="2" id="tamanho"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Apenas números</td>
+            <td colspan="20" id="numeros"></td>
+            <td colspan="20" id="tamNumeros"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Apenas letras</td>
+            <td id="letras"></td>
+            <td id="tamLetras"></td>
+        </tr>
+        <tr><th colspan="4">Formatos com números</th></tr>
+        <tr>
+			<th>Descrição</th><th>Formato padrão</th><th>Tam.</th><th>Resultado</th>
+		</tr>
+		<tr class="row">
+			<td>CEP</td>
+			<td class="format">XXXXX-XXX</td>
+			<td>8</td>
+			<td colspan="20" id="cep"></td>
+		</tr>
+		<tr class="row">
+			<td>CNPJ</td>
+			<td class="format">XX.XXX.XXX/XXXX-XX</td>
+			<td>14</td>
+			<td colspan="20" id="cnpj"></td>
+		</tr>
+		<tr class="row">
+			<td>CPF</td>
+			<td class="format">XXX.XXX.XXX-XX</td>
+			<td>11</td>
+			<td colspan="20" id="cpf"></td>
+		</tr>
+		<tr class="row">
+			<td>TELEFONE</td>
+			<td class="format">(XX) XXXXX-XXXX</td>
+			<td>10/11</td>
+			<td colspan="20" id="telefone"></td>
+		</tr>
+		<tr class="row">
+			<td>DATA</td>
+			<td class="format">DD/MM/AAAA</td>
+			<td>8</td>
+			<td colspan="20" id="data"></td>
+		</tr>
+		<tr class="row">
+			<td>Letra para número</td>
+			<td class="format"> - </td>
+			<td> - </td>
+			<td id="letraPnumero" colspan="2"></td>
+		</tr>
+		<tr><th colspan="4">Formatos com letras e números</th></tr>
+		<tr class="row">
+			<td>URL</td>
+			<td class="format">http://(www.)xxxxxxx.xxx(.xx)</td>
+			<td> - </td>
+			<td id="url" colspan="2"></td>
+		</tr>
+		<tr class="row">
+			<td>Número para letra</td>
+			<td class="format"> - </td>
+			<td> - </td>
+			<td id="numeroPletra" colspan="2"></td>
+		</tr>
+		<tr class="row">
+			<td>Binario para letra</td>
+			<td class="format"> - </td>
+			<td> - </td>
+			<td id="binarioPletra" colspan="2"></td>
+		</tr>
+    </table>
+	<script>
+	    function verificar(){
+	        tamanho();
+	        numeros();
+	        letras();
+	        cep();
+	        cnpj();
+	        cpf();
+	        telefone();
+	        data();
+	        numeroPletra()
+	        url();
+	        letraPnumero();
+	        binarioPletra()
+	    }
+	    
+	    function soNumeros(){
+	        d = document.getElementById('entrada').value;
+            return d.replace(/\D/g,"")
+        }
+        
+        function semNumeros(){
+            d = document.getElementById('entrada').value;
+            return d.replace(/\d/g,"")
+        }
+        
+        function soMinusculas(d){
+         return d.toLowerCase()
+        }
+        
+        function numeros(){
+            resultado = soNumeros();
+            document.getElementById('numeros').innerHTML = resultado;
+            document.getElementById('tamNumeros').innerHTML = resultado.length+" caracteres";
+        }
+        
+        function letras(){
+            resultado = semNumeros();
+            document.getElementById('letras').innerHTML = resultado;
+            document.getElementById('tamLetras').innerHTML = resultado.length+" caracteres";
+        }
+        
+        function tamanho(){
+            resultado = ""
+            d = document.getElementById('entrada').value;
+            resultado = d.length+" caracteres";
+            document.getElementById('tamanho').innerHTML = resultado;
+        }
+	    
+	    function cep(){
+	        resultado = ""
+	        d = soNumeros();
+            if (d.length < 8){
+                resultado = "Numero com <b>menos</b> de 8 dígitos: ";
+            } else if (d.length > 8){
+                resultado = "Numero com <b>mais</b> de 8 dígitos: ";
+            }else{
+                resultado = "<b style='color:blue;'>"
+            }
+            d=d.replace(/^(\d{5})(\d)/,"$1-$2");
+            resultado = resultado+d;
+            document.getElementById('cep').innerHTML = resultado;
+	    }
+	    
+        function cnpj(){
+            resultado = ""
+            d = soNumeros()
+            if (d.length < 14){
+                resultado = "Numero com <b>menos</b> de 14 dígitos: ";
+            }else if (d.length > 14){
+                resultado = "Numero com <b>mais</b> de 14 dígitos: ";
+            }else{
+                resultado = "<b style='color:blue;'>"
+            }
+            
+            d=d.replace(/^(\d{2})(\d)/,"$1.$2");
+            d=d.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3");
+            d=d.replace(/\.(\d{3})(\d)/,".$1/$2");
+            d=d.replace(/(\d{4})(\d)/,"$1-$2");
+            resultado = resultado+d;
+            
+            document.getElementById('cnpj').innerHTML = resultado;
+        }
+        
+        function cpf(){
+            d = soNumeros();
+            resultado = ""
+            if (d.length < 11){
+                resultado = "Numero com <b>menos</b> de 11 dígitos: ";
+            }else if (d.length > 11){
+                resultado = "Numero com <b>mais</b> de 11 dígitos: ";
+            }else{
+                resultado = "<b style='color:blue;'>"
+            }
+            d=d.replace(/(\d{3})(\d)/,"$1.$2");
+            d=d.replace(/(\d{3})(\d)/,"$1.$2");
+            d=d.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+            resultado = resultado+d;
+            document.getElementById('cpf').innerHTML = resultado;
+        }
+        
+        function telefone(){
+            resultado = ""
+            d = soNumeros();
+            if (d.length < 10){
+                resultado = "Numero com <b>menos</b> de 11/10 dígitos: ";
+            } else if (d.length > 11){
+                resultado = "Numero com <b>mais</b> de 11 dígitos: ";
+            }else{
+                resultado = "<b style='color:blue;'>"
+            }
+            formatado=d.replace(/^(\d\d)(\d)/g,"($1) $2");
+            
+            if (d.length == 10){
+                d=formatado.replace(/(\d{4})(\d)/,"$1-$2");
+            }else{
+                d=formatado.replace(/(\d{5})(\d)/,"$1-$2");
+            }
+            resultado = resultado+d;
+            document.getElementById('telefone').innerHTML = resultado;
+        }
+        
+        function data(){
+            resultado = ""
+	        d = soNumeros();
+            if (d.length < 8){
+                resultado = "Numero com <b>menos</b> de 8 dígitos: ";
+            } else if (d.length > 8){
+                resultado = "Numero com <b>mais</b> de 8 dígitos: ";
+            }else{
+                resultado = "<b style='color:blue;'>"
+            }
+            d=d.replace(/(\d{2})(\d)/,"$1/$2")
+            d=d.replace(/(\d{2})(\d)/,"$1/$2")
+            resultado = resultado+d;
+            document.getElementById('data').innerHTML = resultado;
+        }
+        
+        function coordenada(){
+            resultado = ""
+            d = soNumeros();
+            d=d.match( /-?\d+\.\d+/g );
+            resultado = resultado+d;
+            document.getElementById('coordenada').innerHTML = resultado;
+        }
+        
+        function url(){
+            resultado = ""
+            d = document.getElementById('entrada').value;
+            d=d.replace(/http:\/\/?/,"")
+            dominio=d
+            d="http://"+dominio
+            resultado = resultado+d;
+            document.getElementById('url').innerHTML = resultado;
+        }
+        
+        function letraPnumero(){
+            resultado = ""
+            alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+            d = semNumeros();
+            for (var i = 0; i < d.length; i++) {
+              numero = alfabeto.indexOf(soMinusculas(d.charAt(i))) + 1;
+              resultado=resultado+numero+" ";
+            }
+            document.getElementById('letraPnumero').innerHTML = d+": "+resultado;
+        }
+        
+        function numeroPletra(){
+            resultado = ""
+            alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+            d = soNumeros();
+            for (var i = 0; i < d.length; i++) {
+              if (d.charAt(i) == 0){
+                letra = alfabeto[9]
+              }else{
+                letra = alfabeto[d.charAt(i) - 1];
+              }
+              resultado=resultado+letra;
+            }
+            document.getElementById('numeroPletra').innerHTML = d+": "+resultado;
+        }
+
+        function binarioPletra() {
+        	d = soNumeros();
+		  	resultado=d.replace(/[01]{8}/g, function(v){ 
+		    	return String.fromCharCode(parseInt(v, 2));
+		  	});
+		  	document.getElementById('binarioPletra').innerHTML = resultado;
+		}
+	</script>
+	<br><br><br><br>
+</body>
+</html>
