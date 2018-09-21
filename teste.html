@@ -30,19 +30,20 @@
     <table id="list" width="80%">
         <tr><th colspan="4">Informações</th></tr>
         <tr>
-            <td colspan="2">Comprimento</td>
+            <td colspan="3">Comprimento</td>
             <td colspan="2" id="tamanho"></td>
         </tr>
         <tr>
             <td colspan="2">Apenas números</td>
-            <td colspan="20" id="numeros"></td>
-            <td colspan="20" id="tamNumeros"></td>
+            <td colspan="1" id="numeros"></td>
+            <td colspan="1" id="tamNumeros"></td>
         </tr>
         <tr>
             <td colspan="2">Apenas letras</td>
             <td id="letras"></td>
             <td id="tamLetras"></td>
         </tr>
+        
         <tr><th colspan="4">Formatos com números</th></tr>
         <tr>
 			<th>Descrição</th><th>Formato padrão</th><th>Tam.</th><th>Resultado</th>
@@ -102,6 +103,14 @@
 			<td> - </td>
 			<td id="binarioPletra" colspan="2"></td>
 		</tr>
+        <tr><th colspan="4">Formatos com letras</th></tr>
+        <tr>
+            <td colspan="1">Cifra de cesar</td>
+            <td colspan="2">Deslocamento
+                <input type="text" id="deslocamento" onkeyup="cifraDcesar()" size="2">
+            </td>
+            <td id="cifraDcesar"></td>
+        </tr>
     </table>
 	<script>
 	    function verificar(){
@@ -292,6 +301,34 @@
 		  	});
 		  	document.getElementById('binarioPletra').innerHTML = resultado;
 		}
+
+        function cifraDcesar(){
+            frase = semNumeros();
+            alfa = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+            off = document.getElementById('deslocamento').value;
+            var x = parseInt(off);
+            var keep = [];
+
+            for (var i = 0; i < frase.length; i++)
+            {
+             if(frase[i] != ' ')
+             {
+               for (var j = 0; j < alfa.length; j++)
+               {
+                 if (frase[i] == alfa[j])
+                 {
+                   keep[i] = alfa[(j + x) % alfa.length];
+                   break;
+                 }
+               }
+             }
+             else
+             {
+               keep[i] = ' ';
+             }
+            }
+            document.getElementById('cifraDcesar').innerHTML = frase+" : "+keep.join("");
+        }
 	</script>
 	<br><br><br><br>
 </body>
