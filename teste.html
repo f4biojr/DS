@@ -15,6 +15,7 @@
 		.group { background-color: wheat }
 		input#entrada {width: 50%; height: 40px; font-size: 30px; text-align: center;}
 		body pre.prettyprint { border: 0; }
+        a {font-size: 16px}
 	</style>
 </head>
 <body onload="verificar()">
@@ -117,6 +118,7 @@
             <td id="morsePtexto"></td>
         </tr>
     </table>
+    <h1><a href="links_uteis.html" target="blank">Links Úteis</a></h1>
 	<script>
 	    function verificar(){
 	        tamanho();
@@ -126,7 +128,7 @@
 	        cnpj();
 	        cpf();
 	        telefone();
-	        data();
+	        dataCheck();
 	        numeroPletra()
 	        url();
 	        letraPnumero();
@@ -176,11 +178,11 @@
             } else if (d.length > 8){
                 resultado = "Numero com <b>mais</b> de 8 dígitos: ";
             }else{
-                resultado = "<b style='color:blue;'>"
+                resultado = "<b style='color:blue;'><a href='http://www.buscacep.correios.com.br/sistemas/buscacep/'>"
             }
             d=d.replace(/^(\d{5})(\d)/,"$1-$2");
             resultado = resultado+d;
-            document.getElementById('cep').innerHTML = resultado;
+            document.getElementById('cep').innerHTML = resultado+"</a>";
 	    }
 	    
         function cnpj(){
@@ -191,7 +193,7 @@
             }else if (d.length > 14){
                 resultado = "Numero com <b>mais</b> de 14 dígitos: ";
             }else{
-                resultado = "<b style='color:blue;'>"
+                resultado = "<b style='color:blue;'><a href='http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/cnpjreva_solicitacao.asp' target='_blank'>"
             }
             
             d=d.replace(/^(\d{2})(\d)/,"$1.$2");
@@ -200,7 +202,7 @@
             d=d.replace(/(\d{4})(\d)/,"$1-$2");
             resultado = resultado+d;
             
-            document.getElementById('cnpj').innerHTML = resultado;
+            document.getElementById('cnpj').innerHTML = resultado+"</a>";
         }
         
         function cpf(){
@@ -241,19 +243,30 @@
             document.getElementById('telefone').innerHTML = resultado;
         }
         
-        function data(){
+        function dataCheck(){
             resultado = ""
-	        d = soNumeros();
-            if (d.length < 8){
+	        data = soNumeros();
+            if (data.length < 8){
                 resultado = "Numero com <b>menos</b> de 8 dígitos: ";
-            } else if (d.length > 8){
+            } else if (data.length > 8){
                 resultado = "Numero com <b>mais</b> de 8 dígitos: ";
             }else{
-                resultado = "<b style='color:blue;'>"
+                data=data.replace(/(\d{2})(\d)/,"$1/$2")
+                data=data.replace(/(\d{2})(\d)/,"$1/$2")
+                const dateValidationRegex = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+                function isValidDate(strDate) {
+                  if (!dateValidationRegex.test(strDate)) return false;
+                  const [d, m, y] = strDate.split('/').map(n => parseInt(n));
+                  return m === new Date(y, m - 1, d).getMonth() + 1;
+                }
+                if (isValidDate(data)){
+                    resultado = "<b style='color:blue;'>"                
+                } else{
+                    resultado = "Número não é uma data válida: ";
+                }
             }
-            d=d.replace(/(\d{2})(\d)/,"$1/$2")
-            d=d.replace(/(\d{2})(\d)/,"$1/$2")
-            resultado = resultado+d;
+
+            resultado = resultado+data;
             document.getElementById('data').innerHTML = resultado;
         }
         
